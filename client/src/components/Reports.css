@@ -1,0 +1,96 @@
+.reports-page {
+  padding: 40px 20px;
+  font-family: 'Arial', sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f0f4f8, #e0f7fa);
+  text-align: center;
+}
+
+h1 {
+  font-size: 2.5rem;
+  color: #4a148c;
+  margin-bottom: 10px;
+}
+
+.charts-container {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 30px;
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
+
+.chart-card {
+  background: #fff;
+  padding: 10px;
+  border-radius: 15px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+  min-width: 520px;
+}
+
+.summary-section {
+  margin-top: 50px;
+  width: 90%;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+.summary-card {
+  display: flex;
+  justify-content: space-between;
+  background: #fff;
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 15px;
+  flex-wrap: wrap;
+}
+
+.summary-left {
+  max-width: 70%;
+}
+
+.summary-right {
+  max-width: 25%;
+  text-align: center;
+}
+
+.stars {
+  color: #ffb347;
+}
+
+.suggestions-section {
+  margin-top: 50px;
+  width: 90%;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+.suggestions-section h2 {
+  margin-bottom: 20px;
+  color: #4a148c;
+}
+
+.suggestion-card {
+  background: #fff;
+  padding: 15px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  margin-bottom: 15px;
+}
+
+.suggestion-card p {
+  margin: 5px 0;
+}
+
+@media (max-width: 768px) {
+  .charts-container {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
