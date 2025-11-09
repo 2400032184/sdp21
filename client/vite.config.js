@@ -10,4 +10,5 @@ export default defineConfig({
       },
     }),
   ],
+  base: './', // ensures assets load correctly on Vercel
 })
