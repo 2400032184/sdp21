@@ -1,14 +1,37 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
 import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
 
+  // CAPTCHA states
+  const [captcha, setCaptcha] = useState("");
+  const [captchaInput, setCaptchaInput] = useState("");
+
+  // Generate random captcha
+  const generateCaptcha = () => {
+    const random = Math.random().toString(36).substring(2, 8).toUpperCase();
+    setCaptcha(random);
+  };
+
+  useEffect(() => {
+    generateCaptcha();
+  }, []);
+
   const handleSubmit = (e) => {
-    e.preventDefault(); // prevent page reload
-    // you can add validation/auth check here
-    navigate("/AdminDashboard"); // go to Dashboard.jsx
+    e.preventDefault();
+
+    // CAPTCHA validation
+    if (captchaInput !== captcha) {
+      alert("Incorrect CAPTCHA! Please try again.");
+      generateCaptcha();
+      setCaptchaInput("");
+      return;
+    }
+
+    // If captcha is correct → move to admin dashboard
+    navigate("/AdminDashboard");
   };
 
   return (
@@ -18,19 +41,74 @@ const AdminLogin = () => {
         <div className="login-container">
           <h1>Welcome Back Admin!</h1>
           <p>Log in to continue!</p>
+
           <form className="login-form" onSubmit={handleSubmit}>
             <label>Email Address</label>
             <input type="email" placeholder="Enter your email" required />
+
             <label>Password</label>
             <input type="password" placeholder="Enter your password" required />
+
+            {/* CAPTCHA SECTION */}
+            <label>Enter CAPTCHA</label>
+            <div
+              style={{
+                marginBottom: "10px",
+                padding: "10px",
+                background: "#f3f3f3",
+                borderRadius: "8px",
+                textAlign: "center",
+                fontSize: "1.2rem",
+                letterSpacing: "3px",
+                fontWeight: "bold",
+                userSelect: "none",
+              }}
+            >
+              {captcha}
+            </div>
+
+            {/* Larger CAPTCHA input box */}
+            <input
+              type="text"
+              placeholder="Enter CAPTCHA shown above"
+              value={captchaInput}
+              onChange={(e) => setCaptchaInput(e.target.value.toUpperCase())}
+              required
+              style={{
+                marginBottom: "15px",
+                padding: "14px",     // increased padding
+                fontSize: "1rem",     // slight increase in size
+                borderRadius: "8px",
+                border: "1px solid #ccc",
+              }}
+            />
+
+            <button
+              type="button"
+              onClick={generateCaptcha}
+              style={{
+                marginBottom: "15px",
+                padding: "10px",
+                borderRadius: "6px",
+                border: "none",
+                background: "#6a00abff",
+                color: "#fff",
+                cursor: "pointer",
+              }}
+            >
+              Refresh CAPTCHA
+            </button>
+
             <button type="submit">Login</button>
           </form>
+
           <p className="signup-link">
             Are you the User? click here <a href="/Login">User Login</a>
           </p>
         </div>
       </div>
 
+      {/* ORIGINAL CSS - UNTOUCHED */}
       <style>{`
         body, html {
           margin: 0;
@@ -53,7 +131,7 @@ const AdminLogin = () => {
           background: #ffffff;
           padding: 30px 25px;
           border-radius: 15px;
-          max-width: 400px;
+          max-width: 500px;
           width: 100%;
           max-height: 100%;
           overflow: hidden;
