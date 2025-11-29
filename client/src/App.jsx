@@ -8,6 +8,8 @@ import ContactUs from "./components/ContactUs";
 import Services from "./components/Services";
 import Dashboard from "./components/Dashboard";
 import Feedback from "./components/Feedback";
+import UserProfile from "./components/UserProfile";
+import UpdateUserProfile from "./components/UpdateUserProfile";
 import Thank from "./components/Thank";
 import Logout from "./components/Logout";
 import SelectCity from "./components/SelectCity";
@@ -28,9 +30,7 @@ import ViewInfrastructure from "./components/ViewInfrastructure";
 import UserInfrastructureView from "./components/UserInfrastructureView";
 import UserTouristView from "./components/UserTouristView";
 import UserHospitalView from "./components/UserHospitalView";
-import UserProfile from "./components/UserProfile";
-import UpdateUserProfile from "./components/UpdateUserProfile";
-import UserProfileContainer from "./components/UpdateUserProfile";
+
 function App() {
   return (
     <Router>
@@ -43,6 +43,9 @@ function App() {
         <Route path="/Login" element={<Login />} />
         <Route path="/Dashboard" element={<Dashboard />} />
         <Route path="/Feedback" element={<Feedback />} />
+        <Route path="/userprofile" element={<UserProfile />} />
+        <Route path="/updateuserprofile" element={<UpdateUserProfile />} />
+        
         <Route path="/Thank" element={<Thank />} />
         <Route path="/Logout" element={<Logout />} />
         <Route path="/SelectCity" element={<SelectCity />} />
@@ -63,9 +66,7 @@ function App() {
         <Route path="/UserInfrastructureView" element={<UserInfrastructureView />} />
         <Route path="/UserTouristView" element={<UserTouristView />} />
         <Route path="/UserHospitalView" element={<UserHospitalView />} />
-        <Route path="/UserProfile" element={<UserProfile />} />
-        <Route path="/UpdateUserProfile" element={<UpdateUserProfile />} />
-        <Route path="/UserProfileContainer" element={<UserProfileContainer />} />
+
       </Routes>
     </Router>
   );
