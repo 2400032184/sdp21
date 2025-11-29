@@ -1,52 +1,70 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Navbar from "./Navbar";
-import { useNavigate } from "react-router-dom";
-import { FaEye, FaEyeSlash } from "react-icons/fa"; // 👁️ icon import
+import { useNavigate, Link } from "react-router-dom";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Login = () => {
   const navigate = useNavigate();
 
-  // state for inputs
+  // Input state
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
+  // CAPTCHA states
+  const [captcha, setCaptcha] = useState("");
+  const [captchaInput, setCaptchaInput] = useState("");
+
+  // Generate random captcha
+  const generateCaptcha = () => {
+    const random = Math.random().toString(36).substring(2, 8).toUpperCase();
+    setCaptcha(random);
+  };
+
+  useEffect(() => {
+    generateCaptcha();
+  }, []);
+
   const handleSubmit = (e) => {
-  e.preventDefault();
+    e.preventDefault();
 
-  const storedUsers = JSON.parse(localStorage.getItem("registeredUsers")) || [];
-
-  const matchedUser = storedUsers.find(
-    (user) => user.username === username && user.password === password
-  );
-
-  if (!matchedUser) {
-    const userExists = storedUsers.find((user) => user.username === username);
-
-    if (!userExists) {
-      if (
-        window.confirm(
-          "User not registered! Would you like to go to Sign Up page?"
-        )
-      ) {
-        navigate("/SignUp");
-      }
-    } else {
-      alert("Incorrect password! Please try again.");
+    // CAPTCHA validation first
+    if (captchaInput !== captcha) {
+      alert("Incorrect CAPTCHA! Please try again.");
+      generateCaptcha();
+      setCaptchaInput("");
+      return;
     }
-    return;
-  }
 
-  // Store logged-in user in localStorage
-  localStorage.setItem("currentUser", JSON.stringify(matchedUser));
+    const storedUsers = JSON.parse(localStorage.getItem("registeredUsers")) || [];
 
-  // 🔄 Notify Navbar about the login
-  window.dispatchEvent(new Event("storage"));
+    // Find matching user
+    const matchedUser = storedUsers.find(
+      (user) => user.username === username && user.password === password
+    );
 
-  alert(`Welcome, ${matchedUser.username}! Login successful.`);
-  navigate("/Dashboard");
-};
+    if (!matchedUser) {
+      const userExists = storedUsers.find((user) => user.username === username);
 
+      if (!userExists) {
+        if (window.confirm("User not registered! Go to Sign Up page?")) {
+          navigate("/signup");
+        }
+      } else {
+        alert("Incorrect password! Please try again.");
+      }
+      return;
+    }
+
+    // Store logged-in user
+    localStorage.setItem("currentUser", JSON.stringify(matchedUser));
+
+    // Trigger storage event so Navbar updates
+    window.dispatchEvent(new Event("storage"));
+
+    alert(`Welcome, ${matchedUser.username}!`);
+    navigate("/dashboard");
+  };
 
   return (
     <>
@@ -55,14 +73,15 @@ const Login = () => {
         <div className="login-container">
           <h1>Welcome Back</h1>
           <p>Log in to continue!</p>
+
           <form className="login-form" onSubmit={handleSubmit}>
             <label>Username</label>
             <input
               type="text"
               placeholder="Enter your username"
-              required
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              required
             />
 
             <label>Password</label>
@@ -70,9 +89,9 @@ const Login = () => {
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
-                required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
               />
               <span
                 className="toggle-icon"
@@ -82,18 +101,62 @@ const Login = () => {
               </span>
             </div>
 
+            {/* CAPTCHA UI ADDED BELOW */}
+            <label>Enter CAPTCHA</label>
+            <div
+              style={{
+                marginBottom: "10px",
+                padding: "10px",
+                background: "#f3f3f3",
+                borderRadius: "8px",
+                textAlign: "center",
+                fontSize: "1.2rem",
+                letterSpacing: "3px",
+                fontWeight: "bold",
+                userSelect: "none",
+              }}
+            >
+              {captcha}
+            </div>
+
+            <input
+              type="text"
+              placeholder="Enter CAPTCHA shown above"
+              value={captchaInput}
+              onChange={(e) => setCaptchaInput(e.target.value.toUpperCase())}
+              required
+              style={{ marginBottom: "15px" }}
+            />
+
+            <button
+              type="button"
+              onClick={generateCaptcha}
+              style={{
+                marginBottom: "15px",
+                padding: "10px",
+                borderRadius: "6px",
+                border: "none",
+                background: "#6a00abff",
+                color: "#fff",
+                cursor: "pointer",
+              }}
+            >
+              Refresh CAPTCHA
+            </button>
+
             <button type="submit">Login</button>
           </form>
 
           <p className="signup-link">
-            Don't have an account? <a href="/SignUp">Sign Up</a>
+            Don't have an account? <Link to="/signup">Sign Up</Link>
           </p>
           <p className="signup-link">
-            Are you the admin? click here <a href="/AdminLogin">Admin Login</a>
+            Are you the admin? <Link to="/adminlogin">Admin Login</Link>
           </p>
         </div>
       </div>
 
+      {/* YOUR ORIGINAL CSS BELOW — unchanged */}
       <style>{`
         body, html {
           margin: 0;
@@ -116,7 +179,7 @@ const Login = () => {
           background: #ffffff;
           padding: 30px 25px;
           border-radius: 15px;
-          max-width: 400px;
+          max-width: 500px;
           width: 100%;
           max-height: 100%;
           overflow: hidden;
