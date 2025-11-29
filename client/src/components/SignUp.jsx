@@ -32,7 +32,7 @@ const SignUp = () => {
       return;
     }
 
-    // ✅ Password validation
+    //  Password validation
     const passwordPattern =
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     if (!passwordPattern.test(formData.password)) {
