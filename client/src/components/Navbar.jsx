@@ -1,27 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import UserProfileContainer from "./UserProfileContainer";
 import LogoImage from "../styles/logo.jpeg"; // your logo image
 
 const Navbar = ({ toggleSidebar }) => {
-  const [currentUser, setCurrentUser] = useState(null);
   const [showProfile, setShowProfile] = useState(false);
 
-  useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("currentUser"));
-    setCurrentUser(user);
-  }, []);
+  // Get current user from localStorage whenever needed
+  const getCurrentUser = () => {
+    return JSON.parse(localStorage.getItem("currentUser"));
+  };
+
+  const currentUser = getCurrentUser();
 
   return (
     <>
       <nav className="navbar">
         <div className="navbar-left">
-          <img
-            src={LogoImage}
-            alt="Logo"
-            className="logo"
-            onClick={toggleSidebar}
-          />
+          <img src={LogoImage} alt="Logo" className="logo" onClick={toggleSidebar} />
           <h2>Smart City App</h2>
         </div>
 
@@ -44,7 +40,10 @@ const Navbar = ({ toggleSidebar }) => {
       </nav>
 
       {showProfile && (
-        <UserProfileContainer onClose={() => setShowProfile(false)} />
+        <UserProfileContainer
+          user={getCurrentUser()} // pass latest user
+          onClose={() => setShowProfile(false)}
+        />
       )}
     </>
   );
